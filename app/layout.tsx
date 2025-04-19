@@ -4,6 +4,7 @@ import "./globals.css"
 
 import { Poppins } from "next/font/google"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
+import TanstackQuery from "@/providers/TanstackQuery"
 
 const poppins = Poppins({
   weight: "400",
@@ -26,7 +27,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <NuqsAdapter>{children}</NuqsAdapter>
+        <TanstackQuery>
+          <NuqsAdapter>{children}</NuqsAdapter>
+        </TanstackQuery>
       </body>
     </html>
   )

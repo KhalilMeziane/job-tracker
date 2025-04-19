@@ -9,6 +9,7 @@ import { Form } from "@/components/ui/form"
 import { InputField } from "@/components/form"
 
 import { RegisterSchema, RegisterValues } from "./validation"
+import { useRegister } from "../hooks/useRegister"
 
 export default function SignInForm() {
   const form = useForm<RegisterValues>({
@@ -20,22 +21,19 @@ export default function SignInForm() {
     },
   })
 
+  const { mutateAsync, isPending } = useRegister()
+
   const handleSubmit = async (values: RegisterValues) => {
-
-    const res = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
-    });
-
-    const result = await res.json();
-    if (res.ok) {
-      // eslint-disable-next-line no-console
-      console.log("res", result.token)
-    } else {
-      // eslint-disable-next-line no-console
-      console.log("res", result.error)
-    }
+    mutateAsync(values, { 
+      onSuccess(data) {
+        // eslint-disable-next-line no-console
+      console.log("res", data)
+      },
+      onError(error) {
+         // eslint-disable-next-line no-console
+      console.log("error", error)
+      },
+    })
 
   }
 
@@ -68,7 +66,7 @@ export default function SignInForm() {
           control={form.control}
           label={"Password"}
         />
-        <Button className="w-full" size="lg">
+        <Button className="w-full" size="lg" isLoading={isPending}>
           Register
         </Button>
         <p className="text-center text-sm text-gray-700">
