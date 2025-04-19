@@ -20,10 +20,18 @@ export async function POST(req: Request) {
 
     const token = await useCase.execute(name, email, password);
 
+    const response = NextResponse.json({}, { status: 201 })
 
-    return NextResponse.json({ token }, { status: 201 })
+    response.cookies.set("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      maxAge: 86400,
+      path: "/",
+    })
+    return response
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }

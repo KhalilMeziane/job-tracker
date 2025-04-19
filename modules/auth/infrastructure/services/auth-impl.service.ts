@@ -1,5 +1,5 @@
 import { compare, hash } from "bcrypt-ts";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { IAuthService } from "../../domain/ports/auth-service.interface";
 
 export class AuthImplService implements IAuthService {
@@ -13,5 +13,9 @@ export class AuthImplService implements IAuthService {
 
   generateToken(payload: { userId: number }): string {
     return jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: "1d" });
+  }
+
+  verifyToken(token: string): string | JwtPayload {
+    return jwt.verify(token, process.env.JWT_SECRET!);
   }
 }
