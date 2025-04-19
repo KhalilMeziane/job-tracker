@@ -8,12 +8,12 @@ import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { InputField } from "@/components/form"
 
-import { RegisterSchema, RegisterValues } from "./validation"
 import { useRegister } from "../hooks/useRegister"
+import { registerSchema, registerValues } from "@/modules/auth/validators/register.schema"
 
 export default function SignInForm() {
-  const form = useForm<RegisterValues>({
-    resolver: zodResolver(RegisterSchema),
+  const form = useForm<registerValues>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -23,7 +23,7 @@ export default function SignInForm() {
 
   const { mutateAsync, isPending } = useRegister()
 
-  const handleSubmit = async (values: RegisterValues) => {
+  const handleSubmit = async (values: registerValues) => {
     mutateAsync(values, { 
       onSuccess(data) {
         // eslint-disable-next-line no-console

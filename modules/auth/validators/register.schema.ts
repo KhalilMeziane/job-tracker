@@ -1,7 +1,15 @@
 import * as z from "zod";
 
 export const registerSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-  name: z.string().min(6),
+   name: z.string().min(1, {
+     message: 'Name is required',
+   }),
+   email: z.string().email({
+     message: 'Email is required',
+   }),
+   password: z.string().min(1, {
+     message: 'Password is required',
+   }),
 });
+
+export type registerValues = z.infer<typeof registerSchema>;
