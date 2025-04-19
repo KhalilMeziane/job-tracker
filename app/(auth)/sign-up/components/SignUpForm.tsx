@@ -20,9 +20,23 @@ export default function SignInForm() {
     },
   })
 
-  const handleSubmit = (values: RegisterValues) => {
-    // eslint-disable-next-line no-console
-    console.log("values: ", values)
+  const handleSubmit = async (values: RegisterValues) => {
+
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    });
+
+    const result = await res.json();
+    if (res.ok) {
+      // eslint-disable-next-line no-console
+      console.log("res", result.token)
+    } else {
+      // eslint-disable-next-line no-console
+      console.log("res", result.error)
+    }
+
   }
 
   return (
