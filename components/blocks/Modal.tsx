@@ -1,30 +1,30 @@
-'use client';
+"use client"
 
+import useToggle from "@/hooks/useToggle"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import useToggle from '@/hooks/useToggle';
+} from "@/components/ui/dialog"
 
 type TModalProps = {
-  CButton: JSX.Element;
-  title: string;
+  CButton: JSX.Element
+  title: string
   render: ({
     onClose,
     onOpen,
     isOpen,
   }: {
-    onClose: () => void;
-    onOpen: () => void;
-    isOpen: boolean;
-  }) => JSX.Element;
-};
+    onClose: () => void
+    onOpen: () => void
+    isOpen: boolean
+  }) => JSX.Element
+}
 
 export function Modal({ title, CButton, render }: TModalProps) {
-  const { isOpen, onClose, onOpen, toggle } = useToggle();
+  const { isOpen, onClose, onOpen, toggle } = useToggle()
   return (
     <Dialog open={isOpen} onOpenChange={toggle}>
       <DialogTrigger asChild>{CButton}</DialogTrigger>
@@ -35,5 +35,5 @@ export function Modal({ title, CButton, render }: TModalProps) {
         {render({ onClose, onOpen, isOpen })}
       </DialogContent>
     </Dialog>
-  );
+  )
 }

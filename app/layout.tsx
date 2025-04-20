@@ -3,8 +3,8 @@ import type { Metadata } from "next"
 import "./globals.css"
 
 import { Poppins } from "next/font/google"
-import TanstackQuery from "@/providers/TanstackQuery"
 import NuqsAdapterProvider from "@/providers/NuqsAdapter"
+import TanstackQuery from "@/providers/TanstackQuery"
 
 const poppins = Poppins({
   weight: "400",
