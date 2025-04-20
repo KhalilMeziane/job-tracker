@@ -1,14 +1,15 @@
 "use client"
 
 import Link from "next/link"
+import { redirect } from "next/navigation"
 import {
   registerSchema,
   registerValues,
 } from "@/modules/auth/validators/register.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Alert, AlertDescription } from "@/components/ui/alert"
 
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { InputField } from "@/components/form"
@@ -29,13 +30,8 @@ export default function SignInForm() {
 
   const handleSubmit = async (values: registerValues) => {
     mutateAsync(values, {
-      onSuccess(data) {
-        // eslint-disable-next-line no-console
-        console.log("res", data)
-      },
-      onError(error) {
-        // eslint-disable-next-line no-console
-        console.log("error", error)
+      onSuccess() {
+        redirect("/")
       },
     })
   }

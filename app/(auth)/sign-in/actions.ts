@@ -28,7 +28,7 @@ export async function login(body: { email: string, password: string }) {
       path: "/",
     })
 
-    return { status: true, message: "sign-in successful" }
+    return { success: true, message: "sign-in successful" }
   } catch (error: unknown) {
     if (error instanceof Error) {
       return { success: false, message: error.message, };
