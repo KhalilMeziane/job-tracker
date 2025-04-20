@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 export const CreateJobTrackerSchema = z.object({
   company: z.string().min(1, { message: "Company name is required" }),
@@ -15,3 +15,13 @@ export const CreateJobTrackerSchema = z.object({
 })
 
 export type CreateJobTrackerValues = z.infer<typeof CreateJobTrackerSchema>
+
+export const deleteJobTrackerSchema = (name: string) => {
+  return z.object({
+    name: z.string().refine((value) => value.toString() === name.toString(), {
+      message: `Job Tracker Title must be '${name}'`,
+    }),
+  });
+}
+
+export type deleteJobTrackerValues = z.infer<ReturnType<typeof deleteJobTrackerSchema>>;

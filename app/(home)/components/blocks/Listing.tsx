@@ -1,7 +1,7 @@
 import SearchInput from "@/components/SearchInput"
 import TabsFilter from "@/components/TabsFilter"
 
-import { Job, JobCard } from "./blocks/JobCard"
+import { Job, JobCard } from "./JobCard"
 
 const jobs = [
   {

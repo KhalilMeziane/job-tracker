@@ -1,5 +1,5 @@
-import Header from "./components/Header"
-import Listing from "./components/Listing"
+import Header from "./components/blocks/Header"
+import Listing from "./components/blocks/Listing"
 
 export default function Home() {
   return (
