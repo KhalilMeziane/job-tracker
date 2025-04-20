@@ -1,15 +1,19 @@
 "use client"
 
 import Link from "next/link"
+import {
+  registerSchema,
+  registerValues,
+} from "@/modules/auth/validators/register.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import { InputField } from "@/components/form"
 
 import { useRegister } from "../hooks/useRegister"
-import { registerSchema, registerValues } from "@/modules/auth/validators/register.schema"
 
 export default function SignInForm() {
   const form = useForm<registerValues>({
@@ -21,25 +25,29 @@ export default function SignInForm() {
     },
   })
 
-  const { mutateAsync, isPending } = useRegister()
+  const { mutateAsync, isPending, error, isError } = useRegister()
 
   const handleSubmit = async (values: registerValues) => {
-    mutateAsync(values, { 
+    mutateAsync(values, {
       onSuccess(data) {
         // eslint-disable-next-line no-console
-      console.log("res", data)
+        console.log("res", data)
       },
       onError(error) {
-         // eslint-disable-next-line no-console
-      console.log("error", error)
+        // eslint-disable-next-line no-console
+        console.log("error", error)
       },
     })
-
   }
 
   return (
     <Form {...form}>
       <h1 className="mb-2 text-2xl font-semibold">Register to Job Tracker</h1>
+      {isError && (
+        <Alert variant="destructive" className="mb-2">
+          <AlertDescription>{error.message}</AlertDescription>
+        </Alert>
+      )}
       <form
         className="w-full space-y-3"
         onSubmit={form.handleSubmit(handleSubmit)}
