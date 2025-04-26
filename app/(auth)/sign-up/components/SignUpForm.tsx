@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 import {
   registerSchema,
   registerValues,
@@ -17,6 +17,7 @@ import { InputField } from "@/components/form"
 import { useRegister } from "../hooks/useRegister"
 
 export default function SignInForm() {
+  const router = useRouter()
   const form = useForm<registerValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -31,7 +32,7 @@ export default function SignInForm() {
   const handleSubmit = async (values: registerValues) => {
     mutateAsync(values, {
       onSuccess() {
-        redirect("/")
+        router.push("/")
       },
     })
   }
