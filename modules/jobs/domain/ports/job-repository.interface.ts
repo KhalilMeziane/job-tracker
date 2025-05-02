@@ -7,5 +7,5 @@ export interface IJobRepository {
   update(jobId: string, data: UpdateJobTrackerValues): Promise<IJobApplication>;
   delete(jobId: string): Promise<IJobApplication>;
   findById(jobId: string): Promise<IJobApplication | null>;
-  findAllByUser(userId: number): Promise<IJobApplication[]>;
+  findAllByUser(userId: number, { status }: { status: string }): Promise<IJobApplication[]>;
 }

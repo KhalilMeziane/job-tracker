@@ -1,3 +1,4 @@
+import { ApplicationStatus } from "@/lib/generated/prisma";
 import { IJobApplication } from "../../domain/entities/job.entity";
 import { IJobRepository } from "../../domain/ports/job-repository.interface";
 import { IJobService } from "../../domain/ports/job-service.interface";
@@ -18,8 +19,8 @@ export class JobService {
     return this.jobService.getJobById(id);
   }
 
-  async listJobsForUser(userId: number): Promise<IJobApplication[]> {
-    return this.jobService.listJobsForUser(userId);
+  async listJobsForUser(userId: number, { status }: { status: ApplicationStatus }): Promise<IJobApplication[]> {
+    return this.jobService.listJobsForUser(userId, { status });
   }
 
   async updateJob(id: string, body: UpdateJobTrackerValues): Promise<IJobApplication> {

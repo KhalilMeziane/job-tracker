@@ -1,26 +1,48 @@
 import { cookies } from "next/headers"
 import { IJobApplication } from "@/modules/jobs/domain/entities/job.entity"
 
+import { ApplicationStatus } from "@/lib/generated/prisma"
 import SearchInput from "@/components/SearchInput"
 import TabsFilter from "@/components/TabsFilter"
 
 import { JobCard } from "./JobCard"
 
-async function fetchData() {
+async function fetchData({
+  status,
+}: {
+  job?: string
+  status?: ApplicationStatus
+  page?: number
+}) {
   const token = (await cookies()).get("token")?.value
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs`, {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      Cookie: `token=${token}`,
-    },
+  const params = new URLSearchParams({
+    status: status ?? "",
   })
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/jobs?${params.toString()}`,
+    {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        Cookie: `token=${token}`,
+      },
+    }
+  )
   const data = await response.json()
   return data
 }
 
-export default async function Listing() {
-  const { data } = await fetchData()
+export default async function Listing({
+  queryParams: { status },
+}: {
+  queryParams: {
+    job?: string
+    status?: ApplicationStatus
+    page?: number
+  }
+}) {
+  const { data } = await fetchData({ status })
 
   return (
     <section className="py-4">
@@ -32,11 +54,11 @@ export default async function Listing() {
           <TabsFilter
             paramName="status"
             list={[
-              { label: "all", value: "all" },
-              { label: "saved", value: "saved" },
-              { label: "applied", value: "applied" },
-              { label: "offer", value: "offer" },
-              { label: "rejected", value: "rejected" },
+              { label: "APPLIED", value: "APPLIED" },
+              { label: "INTERVIEW", value: "INTERVIEW" },
+              { label: "OFFER", value: "OFFER" },
+              { label: "REJECTED", value: "REJECTED" },
+              { label: "ACCEPTED", value: "ACCEPTED" },
             ]}
           />
         </div>

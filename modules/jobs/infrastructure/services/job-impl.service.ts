@@ -3,6 +3,7 @@ import { CreateJobTrackerValues } from "../../validators/create-job.schema";
 import { UpdateJobTrackerValues } from "../../validators/update-job.schema";
 import { IJobService } from "../../domain/ports/job-service.interface";
 import { IJobRepository } from "../../domain/ports/job-repository.interface";
+import { ApplicationStatus } from "@/lib/generated/prisma";
 
 export class JobServiceImpl implements IJobService {
   private jobRepository: IJobRepository;
@@ -24,8 +25,8 @@ export class JobServiceImpl implements IJobService {
     return job;
   }
 
-  async listJobsForUser(userId: number): Promise<IJobApplication[]> {
-    const jobs = await this.jobRepository.findAllByUser(userId);
+  async listJobsForUser(userId: number, { status }: { status: ApplicationStatus }): Promise<IJobApplication[]> {
+    const jobs = await this.jobRepository.findAllByUser(userId, { status });
     return jobs;
   }
 
