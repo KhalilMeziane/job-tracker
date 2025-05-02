@@ -4,7 +4,7 @@ import { CreateJobTrackerValues } from "../../validators/create-job.schema"
 import { UpdateJobTrackerValues } from "../../validators/update-job.schema"
 
 import prisma from "@/lib/prisma"
-import { ApplicationStatus } from "@/lib/generated/prisma"
+import { GetJobsParamsDTO } from "../../application/dtos/GetJobsParamsDTO"
 
 export class JobPrismaRepository implements IJobRepository {
   async create(userId: number, data: CreateJobTrackerValues): Promise<IJobApplication> {
@@ -31,7 +31,7 @@ export class JobPrismaRepository implements IJobRepository {
   async findById(jobId: string): Promise<IJobApplication | null> {
     return prisma.jobApplication.findUnique({ where: { id: jobId } })
   }
-  async findAllByUser(userId: number, { status, job }: { status: ApplicationStatus, job: string }): Promise<IJobApplication[]> {
+  async findAllByUser(userId: number, { status, job }: GetJobsParamsDTO): Promise<IJobApplication[]> {
     return prisma.jobApplication.findMany({ where: { userId, status, ...(job.length > 0 && { position: { contains: job, mode: "insensitive" } }), } })
   }
 }
