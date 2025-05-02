@@ -5,6 +5,7 @@ import { ApplicationStatus } from "@/lib/generated/prisma"
 import SearchInput from "@/components/SearchInput"
 import TabsFilter from "@/components/TabsFilter"
 
+import Empty from "./Empty"
 import { JobCard } from "./JobCard"
 
 async function fetchData({
@@ -34,7 +35,7 @@ async function fetchData({
 }
 
 export default async function Listing({
-  queryParams: { status },
+  queryParams: { status, job },
 }: {
   queryParams: {
     job?: string
@@ -68,6 +69,9 @@ export default async function Listing({
             <JobCard key={job.id} job={job} />
           ))}
         </div>
+        {!data.length ? (
+          <Empty hasActiveSearch={Object.keys({ status, job }).length > 0} />
+        ) : null}
       </div>
     </section>
   )
