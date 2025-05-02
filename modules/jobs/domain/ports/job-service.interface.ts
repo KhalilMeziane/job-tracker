@@ -6,7 +6,7 @@ import { GetJobsParamsDTO } from "../../application/dtos/GetJobsParamsDTO"
 export interface IJobService {
   createJob(userId: number, body: CreateJobTrackerValues): Promise<IJobApplication>
   getJobById(id: string): Promise<IJobApplication>
-  listJobsForUser(userId: number, params: GetJobsParamsDTO): Promise<IJobApplication[]>
+  listJobsForUser(userId: number, params: GetJobsParamsDTO): Promise<{ jobs: IJobApplication[], totalCount: number }>
   updateJob(id: string, body: UpdateJobTrackerValues): Promise<IJobApplication>
   deleteJob(id: string): Promise<string>
 }

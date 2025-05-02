@@ -1,25 +1,20 @@
 import { cookies } from "next/headers"
+import { GetJobsParamsDTO } from "@/modules/jobs/application/dtos/GetJobsParamsDTO"
 import { IJobApplication } from "@/modules/jobs/domain/entities/job.entity"
 
-import { ApplicationStatus } from "@/lib/generated/prisma"
+import { PaginationWithLinks } from "@/components/ui/pagination-with-links"
 import SearchInput from "@/components/SearchInput"
 import TabsFilter from "@/components/TabsFilter"
 
 import Empty from "./Empty"
 import { JobCard } from "./JobCard"
 
-async function fetchData({
-  status,
-  job,
-}: {
-  job?: string
-  status?: ApplicationStatus
-  page?: number
-}) {
+async function fetchData({ status, job, page }: GetJobsParamsDTO) {
   const token = (await cookies()).get("token")?.value
   const params = new URLSearchParams({
     status: status ?? "",
     job: job ?? "",
+    page: page.toString(),
   })
 
   const response = await fetch(
@@ -37,19 +32,17 @@ async function fetchData({
 }
 
 export default async function Listing({
-  queryParams: { status, job },
+  queryParams: { status, job, page },
 }: {
-  queryParams: {
-    job?: string
-    status?: ApplicationStatus
-    page?: number
-  }
+  queryParams: GetJobsParamsDTO
 }) {
-  const { data } = await fetchData({ status, job })
+  const {
+    data: { jobs, totalCount },
+  } = await fetchData({ status, job, page })
 
   return (
-    <section className="py-4">
-      <div className="mx-auto max-w-6xl px-4">
+    <section className="h-[85vh] py-4">
+      <div className="mx-auto h-full max-w-6xl px-4">
         <div className="flex flex-wrap justify-between gap-2">
           <div className="w-full md:w-72">
             <SearchInput />
@@ -66,14 +59,28 @@ export default async function Listing({
           />
         </div>
 
-        <div className="grid grid-cols-1 gap-3 py-2 sm:grid-cols-2 lg:grid-cols-3">
-          {data?.map((job: IJobApplication) => (
-            <JobCard key={job.id} job={job} />
-          ))}
+        <div className="flex h-full flex-col">
+          <div className="grow">
+            <div className="grid grid-cols-1 gap-3 py-2 sm:grid-cols-2 lg:grid-cols-3">
+              {jobs?.map((job: IJobApplication) => (
+                <JobCard key={job.id} job={job} />
+              ))}
+            </div>
+            {!jobs.length ? (
+              <Empty
+                hasActiveSearch={Object.keys({ status, job }).length > 0}
+              />
+            ) : null}
+          </div>
+
+          {totalCount > 0 && (
+            <PaginationWithLinks
+              totalCount={totalCount}
+              pageSize={10}
+              page={page}
+            />
+          )}
         </div>
-        {!data.length ? (
-          <Empty hasActiveSearch={Object.keys({ status, job }).length > 0} />
-        ) : null}
       </div>
     </section>
   )

@@ -24,6 +24,7 @@ export default function SearchInput() {
       params.delete("job")
     } else {
       params.set("job", job)
+      params.set("page", "1")
     }
     router.push(`?${params.toString()}`)
   }

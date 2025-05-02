@@ -47,8 +47,8 @@ export async function GET(req: NextApiRequest) {
     const useCase = new ListJobsUseCase(
       new JobService(new JobPrismaRepository(), new JobServiceImpl(new JobPrismaRepository()))
     )
-    const jobs = await useCase.execute(userId, { status: queryParams.status, job: queryParams.job })
-    return NextResponse.json({ data: jobs }, { status: 201 })
+    const results = await useCase.execute(userId, { status: queryParams.status, job: queryParams.job, page: queryParams.page })
+    return NextResponse.json({ data: results }, { status: 200 })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return NextResponse.json(
