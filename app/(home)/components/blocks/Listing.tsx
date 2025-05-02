@@ -1,3 +1,4 @@
+import { cookies } from "next/headers"
 import { IJobApplication } from "@/modules/jobs/domain/entities/job.entity"
 
 import SearchInput from "@/components/SearchInput"
@@ -6,7 +7,14 @@ import TabsFilter from "@/components/TabsFilter"
 import { JobCard } from "./JobCard"
 
 async function fetchData() {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs`)
+  const token = (await cookies()).get("token")?.value
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs`, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      Cookie: `token=${token}`,
+    },
+  })
   const data = await response.json()
   return data
 }
@@ -34,7 +42,7 @@ export default async function Listing() {
         </div>
 
         <div className="grid grid-cols-1 gap-3 py-2 sm:grid-cols-2 lg:grid-cols-3">
-          {data.map((job: IJobApplication) => (
+          {data?.map((job: IJobApplication) => (
             <JobCard key={job.id} job={job} />
           ))}
         </div>

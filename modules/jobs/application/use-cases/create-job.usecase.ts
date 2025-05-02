@@ -5,8 +5,7 @@ import { JobService } from "../services/job.service";
 export class CreateJobUseCase {
   constructor(private readonly jobService: JobService) { }
 
-  async execute(body: CreateJobTrackerValues): Promise<IJobApplication> {
-    const userId = 1
+  async execute(body: CreateJobTrackerValues, userId: number): Promise<IJobApplication> {
     return this.jobService.createJob(userId, body);
   }
 }
