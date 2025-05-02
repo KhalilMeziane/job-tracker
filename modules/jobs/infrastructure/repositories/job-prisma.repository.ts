@@ -31,7 +31,7 @@ export class JobPrismaRepository implements IJobRepository {
   async findById(jobId: string): Promise<IJobApplication | null> {
     return prisma.jobApplication.findUnique({ where: { id: jobId } })
   }
-  async findAllByUser(userId: number, { status }: { status: ApplicationStatus }): Promise<IJobApplication[]> {
-    return prisma.jobApplication.findMany({ where: { userId, status } })
+  async findAllByUser(userId: number, { status, job }: { status: ApplicationStatus, job: string }): Promise<IJobApplication[]> {
+    return prisma.jobApplication.findMany({ where: { userId, status, ...(job.length > 0 && { position: { contains: job, mode: "insensitive" } }), } })
   }
 }

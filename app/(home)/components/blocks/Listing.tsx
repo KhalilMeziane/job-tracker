@@ -10,6 +10,7 @@ import { JobCard } from "./JobCard"
 
 async function fetchData({
   status,
+  job,
 }: {
   job?: string
   status?: ApplicationStatus
@@ -18,6 +19,7 @@ async function fetchData({
   const token = (await cookies()).get("token")?.value
   const params = new URLSearchParams({
     status: status ?? "",
+    job: job ?? "",
   })
 
   const response = await fetch(
@@ -43,7 +45,7 @@ export default async function Listing({
     page?: number
   }
 }) {
-  const { data } = await fetchData({ status })
+  const { data } = await fetchData({ status, job })
 
   return (
     <section className="py-4">

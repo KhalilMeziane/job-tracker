@@ -25,8 +25,8 @@ export class JobServiceImpl implements IJobService {
     return job;
   }
 
-  async listJobsForUser(userId: number, { status }: { status: ApplicationStatus }): Promise<IJobApplication[]> {
-    const jobs = await this.jobRepository.findAllByUser(userId, { status });
+  async listJobsForUser(userId: number, { status, job }: { status: ApplicationStatus, job: string }): Promise<IJobApplication[]> {
+    const jobs = await this.jobRepository.findAllByUser(userId, { status, job });
     return jobs;
   }
 

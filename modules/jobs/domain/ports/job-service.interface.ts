@@ -6,7 +6,7 @@ import { IJobApplication } from "../entities/job.entity"
 export interface IJobService {
   createJob(userId: number, body: CreateJobTrackerValues): Promise<IJobApplication>
   getJobById(id: string): Promise<IJobApplication>
-  listJobsForUser(userId: number, { status }: { status: ApplicationStatus }): Promise<IJobApplication[]>
+  listJobsForUser(userId: number, { status, job }: { status: ApplicationStatus, job: string }): Promise<IJobApplication[]>
   updateJob(id: string, body: UpdateJobTrackerValues): Promise<IJobApplication>
   deleteJob(id: string): Promise<string>
 }

@@ -19,8 +19,8 @@ export class JobService {
     return this.jobService.getJobById(id);
   }
 
-  async listJobsForUser(userId: number, { status }: { status: ApplicationStatus }): Promise<IJobApplication[]> {
-    return this.jobService.listJobsForUser(userId, { status });
+  async listJobsForUser(userId: number, { status, job }: { status: ApplicationStatus, job: string }): Promise<IJobApplication[]> {
+    return this.jobService.listJobsForUser(userId, { status, job });
   }
 
   async updateJob(id: string, body: UpdateJobTrackerValues): Promise<IJobApplication> {

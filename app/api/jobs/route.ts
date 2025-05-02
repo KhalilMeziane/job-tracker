@@ -13,7 +13,8 @@ import { NextResponse } from "next/server"
 import {
   createLoader,
   parseAsInteger,
-  parseAsString
+  parseAsString,
+  parseAsStringEnum
 } from "nuqs/server"
 
 export async function GET(req: NextApiRequest) {
@@ -37,14 +38,16 @@ export async function GET(req: NextApiRequest) {
 
     const queryParams = await createLoader({
       job: parseAsString.withDefault(""),
-      status: parseAsString.withDefault(""),
+      status: parseAsStringEnum<ApplicationStatus>(
+        Object.values(ApplicationStatus)
+      ).withDefault(ApplicationStatus.APPLIED),
       page: parseAsInteger.withDefault(1),
     })(searchParams)
 
     const useCase = new ListJobsUseCase(
       new JobService(new JobPrismaRepository(), new JobServiceImpl(new JobPrismaRepository()))
     )
-    const jobs = await useCase.execute(userId, { status: queryParams.status as ApplicationStatus })
+    const jobs = await useCase.execute(userId, { status: queryParams.status, job: queryParams.job })
     return NextResponse.json({ data: jobs }, { status: 201 })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
