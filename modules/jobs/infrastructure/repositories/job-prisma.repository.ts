@@ -53,8 +53,8 @@ export class JobPrismaRepository implements IJobRepository {
       skip: page ? (page - 1) * 10 : undefined,
       take: 10,
       orderBy: {
-        createdAt: "desc"
-      }
+        createdAt: "desc",
+      },
     })
     const totalCount = await prisma.jobApplication.count({
       where: {

@@ -1,11 +1,14 @@
-import { IJobApplication } from "../../domain/entities/job.entity";
-import { JobService } from "../services/job.service";
-import { GetJobsParamsDTO } from "../dtos/GetJobsParamsDTO";
+import { IJobApplication } from "../../domain/entities/job.entity"
+import { GetJobsParamsDTO } from "../dtos/GetJobsParamsDTO"
+import { JobService } from "../services/job.service"
 
 export class ListJobsUseCase {
-  constructor(private readonly jobService: JobService) { }
+  constructor(private readonly jobService: JobService) {}
 
-  async execute(userId: number, params: GetJobsParamsDTO): Promise<IJobApplication[]> {
-    return this.jobService.listJobsForUser(userId, params);
+  async execute(
+    userId: number,
+    params: GetJobsParamsDTO
+  ): Promise<IJobApplication[]> {
+    return this.jobService.listJobsForUser(userId, params)
   }
 }

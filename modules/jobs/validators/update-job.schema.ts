@@ -1,5 +1,6 @@
-import { z } from "zod";
-import { CreateJobTrackerSchema } from "./create-job.schema";
+import { z } from "zod"
+
+import { CreateJobTrackerSchema } from "./create-job.schema"
 
 export const UpdateJobTrackerSchema = CreateJobTrackerSchema
 
