@@ -1,5 +1,9 @@
 "use client"
 
+import {
+  UpdateJobTrackerSchema,
+  UpdateJobTrackerValues,
+} from "@/modules/jobs/validators/create-job.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
@@ -12,15 +16,13 @@ import {
   TextareaField,
 } from "@/components/form"
 
-import { CreateJobTrackerSchema, CreateJobTrackerValues } from "../validation"
-
 export default function UpdateForm() {
-  const form = useForm<CreateJobTrackerValues>({
-    resolver: zodResolver(CreateJobTrackerSchema),
+  const form = useForm<UpdateJobTrackerValues>({
+    resolver: zodResolver(UpdateJobTrackerSchema),
     defaultValues: {},
   })
 
-  const handleSubmit = (values: CreateJobTrackerValues) => {
+  const handleSubmit = (values: UpdateJobTrackerValues) => {
     // eslint-disable-next-line no-console
     console.log("values: ", values)
   }

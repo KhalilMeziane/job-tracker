@@ -15,3 +15,7 @@ export const CreateJobTrackerSchema = z.object({
 })
 
 export type CreateJobTrackerValues = z.infer<typeof CreateJobTrackerSchema>
+
+export const UpdateJobTrackerSchema = CreateJobTrackerSchema
+
+export type UpdateJobTrackerValues = z.infer<typeof UpdateJobTrackerSchema>
