@@ -7,11 +7,17 @@ import prisma from "@/lib/prisma"
 
 export class JobPrismaRepository implements IJobRepository {
   async create(userId: number, data: CreateJobTrackerValues): Promise<IJobApplication> {
+    const { company, dateApplied, location, position, status, notes, url } = data
     return prisma.jobApplication.create({
       data: {
-        ...data,
-        notes: data.notes ?? '',
+        company,
+        dateApplied,
+        location,
+        position,
+        status,
+        notes: notes ?? '',
         userId,
+        applicationLink: url
       }
     })
   }

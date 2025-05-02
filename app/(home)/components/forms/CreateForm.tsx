@@ -1,8 +1,14 @@
 "use client"
 
+import { useState, useTransition } from "react"
+import {
+  CreateJobTrackerSchema,
+  CreateJobTrackerValues,
+} from "@/modules/jobs/validators/create-job.schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import {
@@ -12,20 +18,37 @@ import {
   TextareaField,
 } from "@/components/form"
 
-import { CreateJobTrackerSchema, CreateJobTrackerValues } from "../validation"
+import { CreateJobTracker } from "../../actions"
 
-export default function CreateForm() {
+export default function CreateForm({ onClose }: { onClose: () => void }) {
+  const [isPending, startTransition] = useTransition()
+  const [error, setError] = useState<string>("")
+
   const form = useForm<CreateJobTrackerValues>({
     resolver: zodResolver(CreateJobTrackerSchema),
-    defaultValues: {},
+    defaultValues: {
+      status: "APPLIED",
+    },
   })
 
   const handleSubmit = (values: CreateJobTrackerValues) => {
-    // eslint-disable-next-line no-console
-    console.log("values: ", values)
+    startTransition(async () => {
+      const result = await CreateJobTracker(values)
+      if (!result.success) {
+        setError(result.message)
+      } else {
+        onClose()
+      }
+    })
   }
+
   return (
     <Form {...form}>
+      {error && (
+        <Alert variant="destructive" className="mb-2">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
       <form
         className="grid w-full grid-cols-2 gap-2"
         onSubmit={form.handleSubmit(handleSubmit)}
@@ -57,10 +80,11 @@ export default function CreateForm() {
           control={form.control}
           label={"Status"}
           options={[
-            { label: "saved", value: "saved" },
-            { label: "applied", value: "applied" },
-            { label: "offer", value: "offer" },
-            { label: "rejected", value: "rejected" },
+            { label: "APPLIED", value: "APPLIED" },
+            { label: "INTERVIEW", value: "INTERVIEW" },
+            { label: "OFFER", value: "OFFER" },
+            { label: "REJECTED", value: "REJECTED" },
+            { label: "ACCEPTED", value: "ACCEPTED" },
           ]}
         />
 
@@ -85,7 +109,9 @@ export default function CreateForm() {
             label={"Notes"}
           />
         </div>
-        <Button className="col-span-2 mt-2">Submit</Button>
+        <Button className="col-span-2 mt-2" isLoading={isPending}>
+          Submit
+        </Button>
       </form>
     </Form>
   )

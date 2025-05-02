@@ -12,15 +12,7 @@ export class JobServiceImpl implements IJobService {
   }
 
   async createJob(userId: number, body: CreateJobTrackerValues): Promise<IJobApplication> {
-    const job = await this.jobRepository.create(userId, {
-      company: body.company,
-      position: body.position,
-      location: body.location,
-      status: body.status,
-      dateApplied: body.dateApplied,
-      url: body.url,
-    });
-
+    const job = await this.jobRepository.create(userId, body);
     return job;
   }
 

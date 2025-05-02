@@ -17,8 +17,8 @@ export default function CreateModal() {
           Add New
         </Button>
       }
-      render={() => {
-        return <CreateForm />
+      render={({ onClose }) => {
+        return <CreateForm onClose={onClose} />
       }}
     />
   )
