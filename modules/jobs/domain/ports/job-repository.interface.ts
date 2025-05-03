@@ -1,7 +1,7 @@
-import { GetJobsParamsDTO } from "../../application/dtos/GetJobsParamsDTO"
 import { CreateJobTrackerValues } from "../../validators/create-job.schema"
 import { UpdateJobTrackerValues } from "../../validators/update-job.schema"
 import { IJobApplication } from "../entities/job.entity"
+import { GetJobsParamsType } from "../types/GetJobsParamsType"
 
 export interface IJobRepository {
   create(userId: number, data: CreateJobTrackerValues): Promise<IJobApplication>
@@ -10,6 +10,6 @@ export interface IJobRepository {
   findById(jobId: string): Promise<IJobApplication | null>
   findAllByUser(
     userId: number,
-    params: GetJobsParamsDTO
+    params: GetJobsParamsType
   ): Promise<{ jobs: IJobApplication[]; totalCount: number }>
 }
