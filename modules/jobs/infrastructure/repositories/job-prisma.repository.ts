@@ -28,9 +28,23 @@ export class JobPrismaRepository implements IJobRepository {
   }
   async update(
     jobId: string,
-    data: UpdateJobTrackerValues
+    data: UpdateJobTrackerValues,
+    userId: number
   ): Promise<IJobApplication> {
-    return prisma.jobApplication.update({ where: { id: jobId }, data })
+    const { company, dateApplied, location, position, status, notes, url } =
+      data
+    return prisma.jobApplication.update({
+      where: { id: jobId, userId }, data: {
+        company,
+        dateApplied,
+        location,
+        position,
+        status,
+        notes: notes ?? "",
+        userId,
+        applicationLink: url,
+      },
+    })
   }
   async delete(jobId: string): Promise<IJobApplication> {
     return prisma.jobApplication.delete({ where: { id: jobId } })

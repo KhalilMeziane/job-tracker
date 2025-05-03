@@ -3,8 +3,9 @@ import { cookies } from "next/headers"
 import { notFound } from "next/navigation"
 import { IJobApplication } from "@/modules/jobs/domain/entities/job.entity"
 
-import { JobCard } from "../components/blocks/JobCard"
+import { JobDetailsCard } from "./components/JobDetails"
 
+export const revalidate = 60 * 60 * 24
 export async function generateMetadata({
   params: { id },
 }: {
@@ -45,7 +46,7 @@ export default async function JobDetails({
   return (
     <section>
       <div className="mx-auto h-full max-w-6xl px-4 pt-4">
-        <JobCard job={job} />
+        <JobDetailsCard job={job} />
       </div>
     </section>
   )

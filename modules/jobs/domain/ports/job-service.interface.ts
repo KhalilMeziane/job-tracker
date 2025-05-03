@@ -13,6 +13,6 @@ export interface IJobService {
     userId: number,
     params: GetJobsParamsType
   ): Promise<{ jobs: IJobApplication[]; totalCount: number }>
-  updateJob(id: string, body: UpdateJobTrackerValues): Promise<IJobApplication>
+  updateJob(id: string, body: UpdateJobTrackerValues, userId: number): Promise<IJobApplication>
   deleteJob(id: string): Promise<string>
 }

@@ -31,9 +31,10 @@ export class JobService {
 
   async updateJob(
     id: string,
-    body: UpdateJobTrackerValues
+    body: UpdateJobTrackerValues,
+    userId: number
   ): Promise<IJobApplication> {
-    return this.jobService.updateJob(id, body)
+    return this.jobService.updateJob(id, body, userId)
   }
 
   async deleteJob(id: string): Promise<string> {

@@ -38,17 +38,10 @@ export class JobServiceImpl implements IJobService {
 
   async updateJob(
     id: string,
-    body: UpdateJobTrackerValues
+    body: UpdateJobTrackerValues,
+    userId: number
   ): Promise<IJobApplication> {
-    const updatedJob = await this.jobRepository.update(id, {
-      company: body.company,
-      position: body.position,
-      location: body.location,
-      status: body.status,
-      dateApplied: body.dateApplied,
-      url: body.url,
-    })
-
+    const updatedJob = await this.jobRepository.update(id, body, userId)
     return updatedJob
   }
 
