@@ -4,21 +4,12 @@ import { redirect } from "next/navigation"
 import { NextResponse } from "next/server"
 import { AuthImplService } from "@/modules/auth/infrastructure/services/auth-impl.service"
 import { JobService } from "@/modules/jobs/application/services/job.service"
-import { ListJobsUseCase } from "@/modules/jobs/application/use-cases/list-jobs.usecase"
 import { JobPrismaRepository } from "@/modules/jobs/infrastructure/repositories/job-prisma.repository"
 import { JobServiceImpl } from "@/modules/jobs/infrastructure/services/job-impl.service"
-import {
-  createLoader,
-  parseAsInteger,
-  parseAsString,
-  parseAsStringEnum,
-} from "nuqs/server"
+import { GetJobUseCase } from "@/modules/jobs/application/use-cases/get-job.usecase"
 
-import { ApplicationStatus } from "@/lib/generated/prisma"
-
-export async function GET(req: NextApiRequest) {
+export async function GET(req: NextApiRequest, { params: { id } }: { params: { id: string } }) {
   try {
-    const { searchParams } = new URL(req.url ?? "")
     const cookieStore = cookies()
     const token = cookieStore.get("token")?.value
     let userId: number | null = null
@@ -35,25 +26,13 @@ export async function GET(req: NextApiRequest) {
       redirect("/sign-in")
     }
 
-    const queryParams = await createLoader({
-      job: parseAsString.withDefault(""),
-      status: parseAsStringEnum<ApplicationStatus>(
-        Object.values(ApplicationStatus)
-      ).withDefault(ApplicationStatus.APPLIED),
-      page: parseAsInteger.withDefault(1),
-    })(searchParams)
-
-    const useCase = new ListJobsUseCase(
+    const useCase = new GetJobUseCase(
       new JobService(
         new JobPrismaRepository(),
         new JobServiceImpl(new JobPrismaRepository())
       )
     )
-    const results = await useCase.execute(userId, {
-      status: queryParams.status,
-      job: queryParams.job,
-      page: queryParams.page,
-    })
+    const results = await useCase.execute(id, userId)
     return NextResponse.json({ data: results }, { status: 200 })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {

@@ -8,7 +8,7 @@ export interface IJobService {
     userId: number,
     body: CreateJobTrackerValues
   ): Promise<IJobApplication>
-  getJobById(id: string): Promise<IJobApplication>
+  getJobById(id: string, userId: number): Promise<IJobApplication>
   listJobsForUser(
     userId: number,
     params: GetJobsParamsType

@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { IJobApplication } from "@/modules/jobs/domain/entities/job.entity"
 import { format } from "date-fns"
 import { ExternalLink } from "lucide-react"
@@ -54,9 +55,11 @@ export function JobCard({ job }: { job: IJobApplication }) {
         </div>
       </CardContent>
       <CardFooter className="pt-2">
-        <Button variant="outline" size="sm" className="w-full">
-          View Details
-        </Button>
+        <Link href={`/${job.id}`} className="w-full">
+          <Button variant="outline" size="sm" className="w-full">
+            View Details
+          </Button>
+        </Link>
       </CardFooter>
     </Card>
   )

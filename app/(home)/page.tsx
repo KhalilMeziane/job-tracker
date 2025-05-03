@@ -8,7 +8,6 @@ import {
 
 import { ApplicationStatus } from "@/lib/generated/prisma"
 
-import Header from "./components/blocks/Header"
 import Listing from "./components/blocks/Listing"
 
 type PageProps = {
@@ -23,9 +22,9 @@ export default async function Home({ searchParams }: PageProps) {
     ).withDefault(ApplicationStatus.APPLIED),
     page: parseAsInteger.withDefault(1),
   })(searchParams)
+
   return (
     <>
-      <Header />
       <Listing queryParams={queryParams} />
     </>
   )

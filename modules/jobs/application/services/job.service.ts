@@ -9,7 +9,7 @@ export class JobService {
   constructor(
     private readonly jobRepository: IJobRepository,
     private readonly jobService: IJobService
-  ) {}
+  ) { }
 
   async createJob(
     userId: number,
@@ -18,14 +18,14 @@ export class JobService {
     return this.jobService.createJob(userId, body)
   }
 
-  async getJobById(id: string): Promise<IJobApplication> {
-    return this.jobService.getJobById(id)
+  async getJobById(id: string, userId: number): Promise<IJobApplication> {
+    return this.jobService.getJobById(id, userId)
   }
 
   async listJobsForUser(
     userId: number,
     params: GetJobsParamsDTO
-  ): Promise<IJobApplication[]> {
+  ): Promise<{ jobs: IJobApplication[]; totalCount: number }> {
     return this.jobService.listJobsForUser(userId, params)
   }
 

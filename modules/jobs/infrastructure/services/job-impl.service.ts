@@ -20,8 +20,8 @@ export class JobServiceImpl implements IJobService {
     return job
   }
 
-  async getJobById(id: string): Promise<IJobApplication> {
-    const job = await this.jobRepository.findById(id)
+  async getJobById(id: string, userId: number): Promise<IJobApplication> {
+    const job = await this.jobRepository.findById(id, userId)
     if (!job) {
       throw new Error("Job not found")
     }
