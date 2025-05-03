@@ -6,7 +6,7 @@ import { GetJobsParamsType } from "../types/GetJobsParamsType"
 export interface IJobRepository {
   create(userId: number, data: CreateJobTrackerValues): Promise<IJobApplication>
   update(jobId: string, data: UpdateJobTrackerValues, userId: number): Promise<IJobApplication>
-  delete(jobId: string): Promise<IJobApplication>
+  delete(jobId: string, userId: number): Promise<IJobApplication>
   findById(jobId: string, userId: number): Promise<IJobApplication | null>
   findAllByUser(
     userId: number,

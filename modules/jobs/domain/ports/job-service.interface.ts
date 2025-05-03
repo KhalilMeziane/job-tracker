@@ -14,5 +14,5 @@ export interface IJobService {
     params: GetJobsParamsType
   ): Promise<{ jobs: IJobApplication[]; totalCount: number }>
   updateJob(id: string, body: UpdateJobTrackerValues, userId: number): Promise<IJobApplication>
-  deleteJob(id: string): Promise<string>
+  deleteJob(id: string, userId: number): Promise<IJobApplication>
 }

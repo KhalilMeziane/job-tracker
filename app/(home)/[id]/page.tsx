@@ -3,6 +3,7 @@ import { cookies } from "next/headers"
 import { notFound } from "next/navigation"
 import { IJobApplication } from "@/modules/jobs/domain/entities/job.entity"
 
+import Header from "../components/blocks/Header"
 import { JobDetailsCard } from "./components/JobDetails"
 
 export const revalidate = 60 * 60 * 24
@@ -43,8 +44,12 @@ export default async function JobDetails({
   params: { id: string }
 }) {
   const job = await fetchData({ id })
+  if (!job) {
+    notFound()
+  }
   return (
     <section>
+      <Header />
       <div className="mx-auto h-full max-w-6xl px-4 pt-4">
         <JobDetailsCard job={job} />
       </div>

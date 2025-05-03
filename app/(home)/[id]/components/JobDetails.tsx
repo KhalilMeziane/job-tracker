@@ -26,7 +26,7 @@ export function JobDetailsCard({
           </div>
           <div className="flex gap-1">
             <UpdateModal job={job} />
-            <DeleteModal />
+            <DeleteModal job={job} />
           </div>
         </div>
       </CardHeader>

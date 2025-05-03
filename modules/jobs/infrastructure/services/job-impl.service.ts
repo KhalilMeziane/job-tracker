@@ -45,8 +45,7 @@ export class JobServiceImpl implements IJobService {
     return updatedJob
   }
 
-  async deleteJob(id: string): Promise<string> {
-    await this.jobRepository.delete(id)
-    return id
+  async deleteJob(id: string, userId: number): Promise<IJobApplication> {
+    return await this.jobRepository.delete(id, userId)
   }
 }

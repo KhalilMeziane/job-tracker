@@ -37,7 +37,7 @@ export class JobService {
     return this.jobService.updateJob(id, body, userId)
   }
 
-  async deleteJob(id: string): Promise<string> {
-    return this.jobService.deleteJob(id)
+  async deleteJob(id: string, userId: number): Promise<IJobApplication> {
+    return this.jobService.deleteJob(id, userId)
   }
 }

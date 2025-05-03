@@ -14,6 +14,7 @@ import {
   UpdateJobTrackerValues
 } from "@/modules/jobs/validators/create-job.schema"
 import { UpdateJobUseCase } from "@/modules/jobs/application/use-cases/update-job.usecase"
+import { DeleteJobUseCase } from "@/modules/jobs/application/use-cases/delete-job.usecase"
 
 export async function CreateJobTracker(body: CreateJobTrackerValues) {
   try {
@@ -93,7 +94,47 @@ export async function UpdateJobTracker(id: string, body: UpdateJobTrackerValues)
 
     revalidatePath("/")
 
-    return { success: true, message: "Job created successfully" }
+    return { success: true, message: "Job updated successfully" }
+  } catch (error) {
+    if (error instanceof Error) {
+      return { success: false, message: error.message }
+    } else {
+      return { success: false, message: "something went wrong" }
+    }
+  }
+}
+
+export async function DeleteJobTracker(id: string) {
+  try {
+    const cookieStore = cookies()
+    const token = cookieStore.get("token")?.value
+    let userId: number | null = null
+
+    if (!token) {
+      redirect("/sign-in")
+    }
+    const auth = new AuthImplService()
+
+    try {
+      const verification = auth.verifyToken(token) as { userId: number }
+      userId = verification?.userId
+    } catch {
+      redirect("/sign-in")
+    }
+
+    const useCase = new DeleteJobUseCase(
+      new JobService(
+        new JobPrismaRepository(),
+        new JobServiceImpl(new JobPrismaRepository())
+      )
+    )
+
+    await useCase.execute(id, userId)
+
+    revalidatePath(`/${id}`);
+    revalidatePath(`/`);
+
+    return { success: true, message: "Job deleted successfully" }
   } catch (error) {
     if (error instanceof Error) {
       return { success: false, message: error.message }
