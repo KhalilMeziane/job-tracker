@@ -1,6 +1,5 @@
 import { NextApiRequest } from "next"
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
 import { NextResponse } from "next/server"
 import { AuthImplService } from "@/modules/auth/infrastructure/services/auth-impl.service"
 import { JobService } from "@/modules/jobs/application/services/job.service"
@@ -24,7 +23,7 @@ export async function GET(req: NextApiRequest) {
     let userId: number | null = null
 
     if (!token) {
-      redirect("/sign-in")
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
     const auth = new AuthImplService()
 
@@ -32,7 +31,7 @@ export async function GET(req: NextApiRequest) {
       const verification = auth.verifyToken(token) as { userId: number }
       userId = verification?.userId
     } catch {
-      redirect("/sign-in")
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
     const queryParams = await createLoader({
