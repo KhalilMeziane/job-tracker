@@ -6,6 +6,8 @@ import { Poppins } from "next/font/google"
 import NuqsAdapterProvider from "@/providers/NuqsAdapter"
 import TanstackQuery from "@/providers/TanstackQuery"
 
+import { Toaster } from "@/components/ui/toaster"
+
 const poppins = Poppins({
   weight: "400",
   subsets: ["latin"],
@@ -29,6 +31,7 @@ export default function RootLayout({
       <body className={poppins.className}>
         <TanstackQuery>
           <NuqsAdapterProvider>{children}</NuqsAdapterProvider>
+          <Toaster />
         </TanstackQuery>
       </body>
     </html>
