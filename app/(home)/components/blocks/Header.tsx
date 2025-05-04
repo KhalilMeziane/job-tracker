@@ -5,6 +5,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { LogOut } from "lucide-react"
 
+import api from "@/lib/axios"
 import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 
@@ -32,18 +33,6 @@ export default function Header() {
   )
 }
 
-const logoutCall = async () => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/auth/logout`,
-    {
-      method: "POST",
-      credentials: "include",
-    }
-  )
-  const data = await response.json()
-  return data as { success: boolean; message: string }
-}
-
 const Logout = () => {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
@@ -51,10 +40,10 @@ const Logout = () => {
 
   const handelLogout = () => {
     startTransition(async () => {
-      const result = await logoutCall()
-      if (!result.success) {
+      const result = await api.post(`/auth/logout`)
+      if (result.status !== 200) {
         toast({
-          title: result.message,
+          title: result.data.message,
         })
       } else {
         router.push("/sign-in")
