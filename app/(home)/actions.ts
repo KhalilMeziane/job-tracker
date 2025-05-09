@@ -1,9 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-import { AuthImplService } from "@/modules/auth/infrastructure/services/auth-impl.service"
 import { JobService } from "@/modules/jobs/application/services/job.service"
 import { CreateJobUseCase } from "@/modules/jobs/application/use-cases/create-job.usecase"
 import { JobPrismaRepository } from "@/modules/jobs/infrastructure/repositories/job-prisma.repository"
@@ -15,6 +13,7 @@ import {
 } from "@/modules/jobs/validators/create-job.schema"
 import { UpdateJobUseCase } from "@/modules/jobs/application/use-cases/update-job.usecase"
 import { DeleteJobUseCase } from "@/modules/jobs/application/use-cases/delete-job.usecase"
+import { isAuthenticatedUser } from "@/lib/isAuthenticatedUser"
 
 export async function CreateJobTracker(body: CreateJobTrackerValues) {
   try {
@@ -23,19 +22,9 @@ export async function CreateJobTracker(body: CreateJobTrackerValues) {
       throw new Error("invalid inputs")
     }
 
-    const cookieStore = cookies()
-    const token = cookieStore.get("token")?.value
-    let userId: number | null = null
+    const { isAuthenticated, userId } = await isAuthenticatedUser()
 
-    if (!token) {
-      redirect("/sign-in")
-    }
-    const auth = new AuthImplService()
-
-    try {
-      const verification = auth.verifyToken(token) as { userId: number }
-      userId = verification?.userId
-    } catch {
+    if (!isAuthenticated) {
       redirect("/sign-in")
     }
 
@@ -67,19 +56,9 @@ export async function UpdateJobTracker(id: string, body: UpdateJobTrackerValues)
       throw new Error("invalid inputs")
     }
 
-    const cookieStore = cookies()
-    const token = cookieStore.get("token")?.value
-    let userId: number | null = null
+    const { isAuthenticated, userId } = await isAuthenticatedUser()
 
-    if (!token) {
-      redirect("/sign-in")
-    }
-    const auth = new AuthImplService()
-
-    try {
-      const verification = auth.verifyToken(token) as { userId: number }
-      userId = verification?.userId
-    } catch {
+    if (!isAuthenticated) {
       redirect("/sign-in")
     }
 
@@ -106,19 +85,9 @@ export async function UpdateJobTracker(id: string, body: UpdateJobTrackerValues)
 
 export async function DeleteJobTracker(id: string) {
   try {
-    const cookieStore = cookies()
-    const token = cookieStore.get("token")?.value
-    let userId: number | null = null
+    const { isAuthenticated, userId } = await isAuthenticatedUser()
 
-    if (!token) {
-      redirect("/sign-in")
-    }
-    const auth = new AuthImplService()
-
-    try {
-      const verification = auth.verifyToken(token) as { userId: number }
-      userId = verification?.userId
-    } catch {
+    if (!isAuthenticated) {
       redirect("/sign-in")
     }
 

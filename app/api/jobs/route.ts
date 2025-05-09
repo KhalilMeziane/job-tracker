@@ -1,7 +1,5 @@
 import { NextApiRequest } from "next"
-import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
-import { AuthImplService } from "@/modules/auth/infrastructure/services/auth-impl.service"
 import { JobService } from "@/modules/jobs/application/services/job.service"
 import { ListJobsUseCase } from "@/modules/jobs/application/use-cases/list-jobs.usecase"
 import { JobPrismaRepository } from "@/modules/jobs/infrastructure/repositories/job-prisma.repository"
@@ -14,27 +12,18 @@ import {
 } from "nuqs/server"
 
 import { ApplicationStatus } from "@/lib/generated/prisma"
+import { isAuthenticatedUser } from "@/lib/isAuthenticatedUser"
 
 export async function GET(req: NextApiRequest) {
   try {
     const { searchParams } = new URL(req.url ?? "")
-    const cookieStore = cookies()
-    const token = cookieStore.get("token")?.value
-    let userId: number | null = null
+    const { isAuthenticated, userId } = await isAuthenticatedUser()
 
-    if (!token) {
-      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
-    }
-    const auth = new AuthImplService()
-
-    try {
-      const verification = auth.verifyToken(token) as { userId: number }
-      userId = verification?.userId
-    } catch {
+    if (!isAuthenticated) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
-    const queryParams = await createLoader({
+    const queryParams = createLoader({
       job: parseAsString.withDefault(""),
       status: parseAsStringEnum<ApplicationStatus>(
         Object.values(ApplicationStatus)
