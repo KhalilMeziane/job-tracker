@@ -4,6 +4,7 @@ import { RegisterUseCase } from "@/modules/auth/application/use-cases/register.u
 import { UserPrismaRepository } from "@/modules/auth/infrastructure/repositories/user-prisma.repository"
 import { AuthImplService } from "@/modules/auth/infrastructure/services/auth-impl.service"
 import { registerSchema } from "@/modules/auth/validators/register.schema"
+import { AppError } from "@/lib/errors"
 
 export async function POST(req: Request) {
   try {
@@ -30,9 +31,13 @@ export async function POST(req: Request) {
       path: "/",
     })
     return response
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
+    if (error instanceof AppError) {
+      return NextResponse.json(
+        { message: error.message },
+        { status: error.statusCode }
+      );
+    }
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

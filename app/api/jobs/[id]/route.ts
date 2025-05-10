@@ -5,6 +5,7 @@ import { JobPrismaRepository } from "@/modules/jobs/infrastructure/repositories/
 import { JobServiceImpl } from "@/modules/jobs/infrastructure/services/job-impl.service"
 import { GetJobUseCase } from "@/modules/jobs/application/use-cases/get-job.usecase"
 import { isAuthenticatedUser } from "@/lib/isAuthenticatedUser"
+import { AppError } from "@/lib/errors"
 
 export async function GET(req: NextApiRequest, { params: { id } }: { params: { id: string } }) {
   try {
@@ -22,8 +23,13 @@ export async function GET(req: NextApiRequest, { params: { id } }: { params: { i
     )
     const results = await useCase.execute(id, userId)
     return NextResponse.json({ data: results }, { status: 200 })
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
+    if (error instanceof AppError) {
+      return NextResponse.json(
+        { message: error.message },
+        { status: error.statusCode }
+      );
+    }
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

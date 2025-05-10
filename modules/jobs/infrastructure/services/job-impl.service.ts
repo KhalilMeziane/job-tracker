@@ -1,3 +1,4 @@
+import { handlePrismaError } from "@/lib/prismaErrorHandler"
 import { GetJobsParamsDTO } from "../../application/dtos/GetJobsParamsDTO"
 import { IJobApplication } from "../../domain/entities/job.entity"
 import { IJobRepository } from "../../domain/ports/job-repository.interface"
@@ -16,24 +17,30 @@ export class JobServiceImpl implements IJobService {
     userId: number,
     body: CreateJobTrackerValues
   ): Promise<IJobApplication> {
-    const job = await this.jobRepository.create(userId, body)
-    return job
+    try {
+      return await this.jobRepository.create(userId, body)
+    } catch (error) {
+      throw handlePrismaError(error, 'Job');
+    }
   }
 
   async getJobById(id: string, userId: number): Promise<IJobApplication> {
-    const job = await this.jobRepository.findById(id, userId)
-    if (!job) {
-      throw new Error("Job not found")
+    try {
+      return await this.jobRepository.findById(id, userId)
+    } catch (error) {
+      throw handlePrismaError(error, 'Job');
     }
-    return job
   }
 
   async listJobsForUser(
     userId: number,
     params: GetJobsParamsDTO
   ): Promise<{ jobs: IJobApplication[]; totalCount: number }> {
-    const jobs = await this.jobRepository.findAllByUser(userId, params)
-    return jobs
+    try {
+      return await this.jobRepository.findAllByUser(userId, params)
+    } catch (error) {
+      throw handlePrismaError(error, 'Job');
+    }
   }
 
   async updateJob(
@@ -41,11 +48,18 @@ export class JobServiceImpl implements IJobService {
     body: UpdateJobTrackerValues,
     userId: number
   ): Promise<IJobApplication> {
-    const updatedJob = await this.jobRepository.update(id, body, userId)
-    return updatedJob
+    try {
+      return await this.jobRepository.update(id, body, userId)
+    } catch (error) {
+      throw handlePrismaError(error, 'Job');
+    }
   }
 
   async deleteJob(id: string, userId: number): Promise<IJobApplication> {
-    return await this.jobRepository.delete(id, userId)
+    try {
+      return await this.jobRepository.delete(id, userId)
+    } catch (error) {
+      throw handlePrismaError(error, 'Job');
+    }
   }
 }

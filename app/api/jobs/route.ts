@@ -13,6 +13,7 @@ import {
 
 import { ApplicationStatus } from "@/lib/generated/prisma"
 import { isAuthenticatedUser } from "@/lib/isAuthenticatedUser"
+import { AppError } from "@/lib/errors"
 
 export async function GET(req: NextApiRequest) {
   try {
@@ -43,8 +44,13 @@ export async function GET(req: NextApiRequest) {
       page: queryParams.page,
     })
     return NextResponse.json({ data: results }, { status: 200 })
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
+    if (error instanceof AppError) {
+      return NextResponse.json(
+        { message: error.message },
+        { status: error.statusCode }
+      );
+    }
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

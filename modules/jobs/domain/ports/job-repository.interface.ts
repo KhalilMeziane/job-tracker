@@ -7,7 +7,7 @@ export interface IJobRepository {
   create(userId: number, data: CreateJobTrackerValues): Promise<IJobApplication>
   update(jobId: string, data: UpdateJobTrackerValues, userId: number): Promise<IJobApplication>
   delete(jobId: string, userId: number): Promise<IJobApplication>
-  findById(jobId: string, userId: number): Promise<IJobApplication | null>
+  findById(jobId: string, userId: number): Promise<IJobApplication>
   findAllByUser(
     userId: number,
     params: GetJobsParamsType
