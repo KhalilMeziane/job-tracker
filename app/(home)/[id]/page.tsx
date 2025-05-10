@@ -14,7 +14,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const job = await fetchData({ id })
   if (!job) {
-    notFound()
+    return {
+      title: "Job NotFound",
+    }
   }
   return {
     title: `${job.position} ${job.company}`,
@@ -32,8 +34,19 @@ async function fetchData({ id }: { id: string }): Promise<IJobApplication> {
       headers: {
         Cookie: `token=${token}`,
       },
+      next: { revalidate: 3600 * 24 },
     }
   )
+
+  if (!response.ok) {
+    const errorBody = await response.json()
+    if (response.status === 404) {
+      notFound()
+    } else {
+      // need more enhancement to handel all other status codes
+      throw new Error(errorBody.message)
+    }
+  }
   const data = await response.json()
   return data.data
 }
@@ -44,9 +57,6 @@ export default async function JobDetails({
   params: { id: string }
 }) {
   const job = await fetchData({ id })
-  if (!job) {
-    notFound()
-  }
   return (
     <section>
       <Header />
