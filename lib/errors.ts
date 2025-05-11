@@ -36,3 +36,31 @@ export class DatabaseError extends AppError {
     super(message, 500, code);
   }
 }
+
+export class BadRequestError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'BadRequestError';
+  }
+}
+
+export class ForbiddenError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'ForbiddenError';
+  }
+}
+
+export class UnAuthorizedError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'UnauthorizedError';
+  }
+}
+
+export class UnhandledError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'UnhandledError';
+  }
+}

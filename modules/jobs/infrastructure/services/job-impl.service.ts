@@ -20,7 +20,7 @@ export class JobServiceImpl implements IJobService {
     try {
       return await this.jobRepository.create(userId, body)
     } catch (error) {
-      throw handlePrismaError(error, 'Job');
+      throw handlePrismaError(error);
     }
   }
 
@@ -28,7 +28,7 @@ export class JobServiceImpl implements IJobService {
     try {
       return await this.jobRepository.findById(id, userId)
     } catch (error) {
-      throw handlePrismaError(error, 'Job');
+      throw handlePrismaError(error);
     }
   }
 
@@ -39,7 +39,7 @@ export class JobServiceImpl implements IJobService {
     try {
       return await this.jobRepository.findAllByUser(userId, params)
     } catch (error) {
-      throw handlePrismaError(error, 'Job');
+      throw handlePrismaError(error);
     }
   }
 
@@ -51,7 +51,7 @@ export class JobServiceImpl implements IJobService {
     try {
       return await this.jobRepository.update(id, body, userId)
     } catch (error) {
-      throw handlePrismaError(error, 'Job');
+      throw handlePrismaError(error);
     }
   }
 
@@ -59,7 +59,7 @@ export class JobServiceImpl implements IJobService {
     try {
       return await this.jobRepository.delete(id, userId)
     } catch (error) {
-      throw handlePrismaError(error, 'Job');
+      throw handlePrismaError(error);
     }
   }
 }
