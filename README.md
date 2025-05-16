@@ -9,7 +9,7 @@ A simple and fast job application tracking system built with Next.js 14, TypeScr
 - Add custom notes for better organization and context.
 - Search and filter applications quickly and efficiently.
 - Fully responsive UI built with Next.js 14, Shadcnui, and Tailwind CSS.
-- Secure user authentication with personalized data access.
+- Secure user authentication with personalized data access with json web tokens(JWT).
 - Type-safe and efficient database handling using Prisma ORM with PostgreSQL.
 
 ## 🛠️ Technologies
@@ -19,6 +19,8 @@ A simple and fast job application tracking system built with Next.js 14, TypeScr
 - **Prisma ORM**
 - **Tailwind CSS**
 - **ShadcnUi**
+- **react-hook-form**
+- **JWT**
 
 ## 📦 Installation & Setup
 
